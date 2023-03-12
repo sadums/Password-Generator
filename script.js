@@ -15,7 +15,7 @@ function askLength(){
   while(!lengthCorrect){
     var length = prompt("Please enter a length between 8-128 characters");
     // check if inputted length fits criteria. if length does not fit, will loop.
-    if(parseInt(length) > 8 && parseInt(length) < 128){
+    if(parseInt(length) >= 8 && parseInt(length) <= 128){
       lengthCorrect = true;
     }
   }
@@ -28,14 +28,14 @@ function askChars(){
   var chars = []
   while(!selected){
     // ask for criteria
-    chars[0] = {"criteria": lowercase, "result": confirm("Use lowercase alphabet characters?")}
-    chars[1] = {"criteria": uppercase, "result": confirm("Use uppercase alphabet characters?")}
-    chars[2] = {"criteria": numbers, "result": confirm("Use numeric characters?")}
-    chars[3] = {"criteria": special, "result": confirm("Use special characters?")}
+    chars[0] = {"set": lowercase, "result": confirm("Use lowercase alphabet characters?")}
+    chars[1] = {"set": uppercase, "result": confirm("Use uppercase alphabet characters?")}
+    chars[2] = {"set": numbers, "result": confirm("Use numeric characters?")}
+    chars[3] = {"set": special, "result": confirm("Use special characters?")}
 
     // if none are selected, loop will repeat
-    chars.forEach(x => (selected += x.result)&1);
-    console.log(selected);
+    chars.forEach(x => (selected += x.result));
+    
     if(!selected){
       alert("Please select one criteria.")
     }
@@ -53,16 +53,17 @@ function askChars(){
 function generatePassword(){
   var length = askLength();
   var chars = askChars();
-  console.log(length);
-  console.log(chars);
 
+  // empty password variable
   let password = "";
 
+  // for loop to fill password variable
   for(let i = 0; i < length; i++){
-    let randCharArr = chars[(Math.random()*chars.length) | 0].criteria;
+    // randomly choosing one of the selected character sets
+    let randCharArr = chars[(Math.random()*chars.length) | 0].set;
+    // randomly choosing one of the characters within the selected character set, and adding to password string
     password += randCharArr[(Math.random()*randCharArr.length) | 0];
   }
-  console.log(password);
 
   return password;
 }
