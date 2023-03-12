@@ -22,38 +22,51 @@ function askLength(){
   return length;
 }
 
+// Prompt user for which character criteria to follow
 function askChars(){
   let selected = false;
+  var chars = []
   while(!selected){
     // ask for criteria
-    var lowercase = confirm("Use lowercase alphabet characters?");
-    var uppercase = confirm("Use uppercase alphabet characters?");
-    var numeric = confirm("Use numeric characters?");
-    var special = confirm("Use special characters?");
+    chars[0] = {"criteria": lowercase, "result": confirm("Use lowercase alphabet characters?")}
+    chars[1] = {"criteria": uppercase, "result": confirm("Use uppercase alphabet characters?")}
+    chars[2] = {"criteria": numbers, "result": confirm("Use numeric characters?")}
+    chars[3] = {"criteria": special, "result": confirm("Use special characters?")}
+
     // if none are selected, loop will repeat
-    if(lowercase || uppercase || numeric || special){
-      selected = true;
-    }else{
-      alert("please select at least one.")
+    chars.forEach(x => (selected += x.result)&1);
+    console.log(selected);
+    if(!selected){
+      alert("Please select one criteria.")
     }
   }
-  // return an object containing the criteria for character selection
-  return {
-    "lowercase" : lowercase,
-    "uppercase" : uppercase,
-    "numeric" : numeric,
-    "special" : special
-  }
+
+  // remove unselected criteria
+  chars = chars.filter(x => x.result == true);
+
+  // return an array of objects containing the selected criteria for character selection
+  return chars;
 }
+
 
 // randomly generate password based on user criteria
 function generatePassword(){
   var length = askLength();
-  var charCriteria = askChars();
-  console.log(charCriteria);
+  var chars = askChars();
+  console.log(length);
+  console.log(chars);
 
   let password = "";
+
+  for(let i = 0; i < length; i++){
+    let randCharArr = chars[(Math.random()*chars.length) | 0].criteria;
+    password += randCharArr[(Math.random()*randCharArr.length) | 0];
+  }
+  console.log(password);
+
+  return password;
 }
+
 
 // Write password to the #password input
 function writePassword() {
@@ -61,10 +74,11 @@ function writePassword() {
 
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-
+  
   passwordText.value = password;
   
 }
+
 
 // event listener for "Generate Password" button
 generateBtn.addEventListener("click", writePassword);
