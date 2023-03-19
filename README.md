@@ -18,7 +18,7 @@ Answer prompts for password criteria
 Copy password from textbox
 ![generated password in textbox](./assets/guide3.png)
 
-https://sadums.github.io/Password-Generator/
+https://sadums.github.io/password-generator/
 
 ## License
 
